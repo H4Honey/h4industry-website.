@@ -25,6 +25,11 @@
       height: 100vh;
       position: fixed;
       top: 0;
+      left: -220px;
+      transition: left 0.3s ease;
+      z-index: 1000;
+    }
+    .sidebar.open {
       left: 0;
     }
     .sidebar h2 {
@@ -46,8 +51,12 @@
       background: #ffe8a3;
     }
     .main-content {
+      margin-left: 0;
+      width: 100%;
+      transition: margin-left 0.3s ease;
+    }
+    .main-content.sidebar-open {
       margin-left: 220px;
-      width: calc(100% - 220px);
     }
     header {
       background: linear-gradient(90deg, #ffe8a3, #ffd384);
@@ -134,17 +143,41 @@
       text-align: center;
       padding: 1rem;
     }
+    .hamburger {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      width: 30px;
+      height: 20px;
+      cursor: pointer;
+      margin: 1rem;
+      z-index: 1100;
+      position: fixed;
+    }
+    .hamburger div {
+      background-color: #8c5700;
+      height: 4px;
+      width: 100%;
+      border-radius: 5px;
+    }
   </style>
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 </head>
-<body>
-  <div class="sidebar">
+<body onclick="closeSidebar(event)">
+  <div class="hamburger" id="hamburgerMenu" onclick="event.stopPropagation(); toggleSidebar()">
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
+
+  <div class="sidebar" id="sidebar" onclick="event.stopPropagation()">
     <h2>H4 MENU</h2>
     <a href="#products">Our Honeys</a>
     <a href="#about">About</a>
     <a href="#contact">Contact</a>
   </div>
-  <div class="main-content">
+
+  <div class="main-content" id="mainContent">
     <header>
       <h1>H4 INDUSTRY</h1>
       <p>"HONESTY HAI HUMANITY HAI"</p>
@@ -191,7 +224,24 @@
       &copy; 2025 H4 INDUSTRY — All Rights Reserved
     </footer>
   </div>
+
   <script>
+    function toggleSidebar() {
+      var sidebar = document.getElementById("sidebar");
+      var mainContent = document.getElementById("mainContent");
+      sidebar.classList.toggle("open");
+      mainContent.classList.toggle("sidebar-open");
+    }
+
+    function closeSidebar(event) {
+      var sidebar = document.getElementById("sidebar");
+      var mainContent = document.getElementById("mainContent");
+      if (sidebar.classList.contains("open")) {
+        sidebar.classList.remove("open");
+        mainContent.classList.remove("sidebar-open");
+      }
+    }
+
     function payNow(productName, amountInPaise) {
       var options = {
         "key": "YOUR_RAZORPAY_KEY_HERE",
